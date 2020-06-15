@@ -9,7 +9,7 @@ pipeline {
                  $class: 'GitSCM',
                  branches: [[name: 'master']],
                  userRemoteConfigs: [[
-                    url: 'git@github.com:pallocchi/jenkins-project.git',
+                    url: 'https://github.com/pallocchi/jenkins-project.git',
                     credentialsId: '',
                  ]]
                 ])
