@@ -1,38 +1,20 @@
-properties([pipelineTriggers([githubPush()])])
+@Library('jenkins-scripts')_
 
-pipeline {
-    agent any
-    stages {
-        stage('Checkout SCM') {
-            steps {
-                checkout([
-                 $class: 'GitSCM',
-                 branches: [[name: 'master']],
-                 userRemoteConfigs: [[
-                    url: 'https://github.com/pallocchi/jenkins-project.git',
-                    credentialsId: '',
-                 ]]
-                ])
-            }
-        }
-        stage('Unit & Integration Tests') {
-            steps {
-                script {
-                    sh './gradlew clean test --no-daemon'
-                }
-            }
-        }
-        stage('Do the deployment') {
-            steps {
-                echo ">> Run deploy applications "
-            }
-        }
-    }
+stage('Pull') {
+    checkout([
+     $class: 'GitSCM',
+     branches: [[name: 'master']],
+     userRemoteConfigs: [[
+        url: 'https://github.com/pallocchi/jenkins-project.git',
+        credentialsId: '',
+     ]]
+    ])
+}
 
-    /* Cleanup workspace */
-    post {
-       always {
-           deleteDir()
-       }
-   }
+stage('Test') {
+    test
+}
+
+stage('Deploy') {
+    deploy "HelloWorld.app"
 }
