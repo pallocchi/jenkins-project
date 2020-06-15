@@ -1,9 +1,7 @@
 properties([pipelineTriggers([githubPush()])])
 
 pipeline {
-    agent {
-        label 'github-ci'
-    }
+    agent none
     stages {
         stage('Checkout SCM') {
             steps {
