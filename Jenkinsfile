@@ -1,20 +1,38 @@
-@Library('jenkins-scripts')_
+properties([pipelineTriggers([githubPush()])])
 
-stage('Pull') {
-    checkout([
-     $class: 'GitSCM',
-     branches: [[name: 'master']],
-     userRemoteConfigs: [[
-        url: 'https://github.com/pallocchi/jenkins-project.git',
-        credentialsId: '',
-     ]]
-    ])
+libraries {
+  lib('jenkins-scripts')
 }
 
-stage('Test') {
-    test
-}
-
-stage('Deploy') {
-    deploy "HelloWorld.app"
+pipeline {
+    agent any
+    stages {
+        stage('Pull') {
+            steps {
+                checkout([
+                 $class: 'GitSCM',
+                 branches: [[name: 'master']],
+                 userRemoteConfigs: [[
+                    url: 'https://github.com/pallocchi/jenkins-project.git',
+                    credentialsId: '',
+                 ]]
+                ])
+            }
+        }
+        stage('Test') {
+            steps {
+                test
+            }
+        }
+        stage('Deploy') {
+            steps {
+                deploy "HelloWorld.app"
+            }
+        }
+    }
+    post {
+        always {
+            deleteDir()
+        }
+    }
 }
