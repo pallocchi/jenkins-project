@@ -1,8 +1,6 @@
 properties([pipelineTriggers([githubPush()])])
 
-libraries {
-  lib('jenkins-scripts')
-}
+@Library('jenkins-scripts') _
 
 pipeline {
     agent any
@@ -21,12 +19,16 @@ pipeline {
         }
         stage('Test') {
             steps {
-                test
+                script {
+                    test
+                }
             }
         }
         stage('Deploy') {
             steps {
-                deploy "HelloWorld.app"
+                script {
+                    deploy "HelloWorld.app"
+                }
             }
         }
     }
