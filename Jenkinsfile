@@ -18,11 +18,7 @@ pipeline {
         stage('Unit & Integration Tests') {
             steps {
                 script {
-                    try {
-                        sh './gradlew clean test --no-daemon'
-                    } finally {
-                        junit '**/build/test-results/test/*.xml'
-                    }
+                    sh './gradlew clean test --no-daemon'
                 }
             }
         }
